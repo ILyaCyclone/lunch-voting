@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    schema: classpath:/db/schema.sql
+    data: classpath:/db/data.sql
+
+  jpa:
+    show-sql: true
+
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
