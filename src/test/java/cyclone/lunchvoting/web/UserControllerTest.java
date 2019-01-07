@@ -23,8 +23,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class UserControllerTest extends AbstractControllerTest {
     private static final Logger logger = LoggerFactory.getLogger(UserControllerTest.class);
@@ -83,5 +82,23 @@ class UserControllerTest extends AbstractControllerTest {
 
         Assertions.assertThat(actualVotingStatus.getVotingEndTime()).isEqualTo(expectedVotingEndTime);
         Assertions.assertThat(actualVotingStatus.isVotingActive()).isEqualTo(expectedVotingActive);
+    }
+
+
+
+    @Test
+    void getVotingResult() throws Exception {
+//        MvcResult mvcResult =
+        mockMvc.perform(get(URL + "/voting-result")
+                .with(httpBasicAuth(USER200)))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(RESTAURANT1.getId()))
+                .andExpect(jsonPath("$[0].name").value(RESTAURANT1.getName()))
+                .andExpect(jsonPath("$[0].votes").value(2))
+                .andExpect(jsonPath("$.length()").value(1))
+        ;
     }
 }

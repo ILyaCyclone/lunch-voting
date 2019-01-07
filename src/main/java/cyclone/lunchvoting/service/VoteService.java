@@ -1,11 +1,13 @@
 package cyclone.lunchvoting.service;
 
+import cyclone.lunchvoting.dto.RestaurantVotes;
 import cyclone.lunchvoting.dto.VotingStatus;
 import cyclone.lunchvoting.entity.Restaurant;
 import cyclone.lunchvoting.entity.User;
 import cyclone.lunchvoting.entity.Vote;
 import cyclone.lunchvoting.exception.NotFoundException;
 import cyclone.lunchvoting.exception.VotingIsNotActiveException;
+import cyclone.lunchvoting.exception.VotingIsNotFinishedException;
 import cyclone.lunchvoting.repository.RestaurantRepository;
 import cyclone.lunchvoting.repository.UserRepository;
 import cyclone.lunchvoting.repository.VoteRepository;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Service
 public class VoteService {
@@ -71,5 +74,14 @@ public class VoteService {
 
     private LocalTime getVotingEndTime() {
         return DateTimeUtils.hhDashMmToLocalTime(votingEnds);
+    }
+
+
+    public List<RestaurantVotes> getVotingResult(LocalDateTime dateTime) {
+        if(DateTimeUtils.isPast(dateTime) || isVotingActive(dateTime.toLocalTime())) {
+            return voteRepository.getVotingWinners(dateTime.toLocalDate());
+        } else {
+            throw new VotingIsNotFinishedException("Voting is not finished at "+dateTime+".");
+        }
     }
 }

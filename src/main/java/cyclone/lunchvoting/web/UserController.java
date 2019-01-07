@@ -1,5 +1,6 @@
 package cyclone.lunchvoting.web;
 
+import cyclone.lunchvoting.dto.RestaurantVotes;
 import cyclone.lunchvoting.dto.VotingStatus;
 import cyclone.lunchvoting.entity.Restaurant;
 import cyclone.lunchvoting.service.RestaurantService;
@@ -41,5 +42,12 @@ public class UserController {
     @GetMapping("/voting-status")
     public VotingStatus getVotingStatus() {
         return voteService.getVotingStatus(now());
+    }
+
+
+
+    @GetMapping("/voting-result")
+    public List<RestaurantVotes> getVotingResult() {
+        return voteService.getVotingResult(dateTime());
     }
 }
