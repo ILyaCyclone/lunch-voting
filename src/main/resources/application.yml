@@ -6,7 +6,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none # disable Hibernate schema initialization
-
+  data:
+    rest:
+      base-path: /api/admin
+      detection-strategy: annotated
 
 cyclone:
   lunchvoting:
