@@ -2,12 +2,7 @@ spring:
   datasource:
     schema: classpath:/db/schema.sql
     data: classpath:/db/data.sql
-
+#    initialization-mode: never
   jpa:
-    show-sql: true
-
-  h2:
-    console:
-      enabled: true
-      settings:
-        web-allow-others: true
+    hibernate:
+      ddl-auto: none # disable Hibernate schema initialization
