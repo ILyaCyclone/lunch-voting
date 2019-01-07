@@ -6,3 +6,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none # disable Hibernate schema initialization
+
+
+cyclone:
+  lunchvoting:
+    voting-ends: 11-00 # HH-mm format
