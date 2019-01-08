@@ -78,7 +78,7 @@ public class VoteService {
 
 
     public List<RestaurantVotes> getVotingResult(LocalDateTime dateTime) {
-        if(DateTimeUtils.isPast(dateTime) || isVotingActive(dateTime.toLocalTime())) {
+        if (DateTimeUtils.isPast(dateTime) || !isVotingActive(dateTime.toLocalTime())) {
             return voteRepository.getVotingWinners(dateTime.toLocalDate());
         } else {
             throw new VotingIsNotFinishedException("Voting is not finished at "+dateTime+".");

@@ -4,14 +4,17 @@ import cyclone.lunchvoting.AssertUtils;
 import cyclone.lunchvoting.JsonUtils;
 import cyclone.lunchvoting.dto.VotingStatus;
 import cyclone.lunchvoting.entity.Restaurant;
+import cyclone.lunchvoting.exception.VotingIsNotActiveException;
 import cyclone.lunchvoting.util.DateTimeUtils;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.util.NestedServletException;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -19,7 +22,6 @@ import java.util.List;
 import static cyclone.lunchvoting.TestData.*;
 import static cyclone.lunchvoting.UserTestData.USER200;
 import static cyclone.lunchvoting.web.UserController.URL;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -55,13 +57,29 @@ class UserControllerTest extends AbstractControllerTest {
 
 
     @Test
-    void vote() throws Exception {
+    void vote_successful() throws Exception {
+        Assumptions.assumeTrue(DateTimeUtils.hhDashMmToLocalTime(votingEnds).isAfter(DateTimeUtils.now()), "Voting is not currently active");
+
         mockMvc.perform(post(URL + "/vote/" + RESTAURANT3.getId())
-                .with(httpBasicAuth(USER200))
-                .with(csrf())
+                        .with(httpBasicAuth(USER200))
+//                .with(csrf())
         )
                 .andExpect(status().isNoContent());
+    }
 
+    @Test
+    void vote_notActive() throws Exception {
+        Assumptions.assumeFalse(DateTimeUtils.hhDashMmToLocalTime(votingEnds).isAfter(DateTimeUtils.now()), "Voting is not currently active");
+
+        //
+        Throwable cause = org.junit.jupiter.api.Assertions.assertThrows(NestedServletException.class, () ->
+                        mockMvc.perform(post(URL + "/vote/" + RESTAURANT3.getId())
+                                        .with(httpBasicAuth(USER200))
+//                .with(csrf())
+                        )
+        ).getCause();
+
+        Assertions.assertThat(cause).isInstanceOf(VotingIsNotActiveException.class);
     }
 
     @Test
