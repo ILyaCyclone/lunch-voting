@@ -1,6 +1,5 @@
 package cyclone.lunchvoting;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import org.springframework.test.web.servlet.MvcResult;

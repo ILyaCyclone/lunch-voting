@@ -3,14 +3,10 @@ package cyclone.lunchvoting.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.*;
 
@@ -50,6 +46,6 @@ public class User extends AbstractNamedEntity {
         Assert.hasText(password, "User password can't be empty");
         this.email = email;
         this.password = password;
-        this.roles = roles != null ? new HashSet<Role>(roles) : Collections.emptySet();
+        this.roles = roles != null ? new HashSet(roles) : Collections.emptySet();
     }
 }

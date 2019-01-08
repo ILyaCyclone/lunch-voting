@@ -4,7 +4,6 @@ import cyclone.lunchvoting.entity.MenuItem;
 import cyclone.lunchvoting.entity.Restaurant;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;

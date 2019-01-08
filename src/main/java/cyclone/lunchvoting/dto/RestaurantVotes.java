@@ -1,10 +1,9 @@
 package cyclone.lunchvoting.dto;
 
 public interface RestaurantVotes {
+    int getId();
 
-    public int getId();
+    String getName();
 
-    public String getName();
-
-    public int getVotes();
+    int getVotes();
 }

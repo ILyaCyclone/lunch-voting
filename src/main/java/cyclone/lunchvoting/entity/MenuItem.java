@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -12,8 +11,8 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "menu")
-//@Data
-//@NoArgsConstructor
+@Data
+@NoArgsConstructor
 public class MenuItem extends AbstractNamedEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -66,36 +65,5 @@ public class MenuItem extends AbstractNamedEntity {
         result = 31 * result + (price != null ? price.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
         return result;
-    }
-
-
-
-
-    public MenuItem() {
-
-    }
-
-    public Restaurant getRestaurant() {
-        return restaurant;
-    }
-
-    public void setRestaurant(Restaurant restaurant) {
-        this.restaurant = restaurant;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
     }
 }

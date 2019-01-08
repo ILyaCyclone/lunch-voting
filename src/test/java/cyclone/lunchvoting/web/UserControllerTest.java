@@ -61,7 +61,7 @@ class UserControllerTest extends AbstractControllerTest {
                 .with(csrf())
         )
                 .andExpect(status().isNoContent());
-        ;
+
     }
 
     @Test

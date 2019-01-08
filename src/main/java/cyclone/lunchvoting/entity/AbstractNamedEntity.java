@@ -13,14 +13,14 @@ import javax.validation.constraints.Size;
 @MappedSuperclass
 @Data
 @NoArgsConstructor
-public abstract class AbstractNamedEntity extends AbstractBaseEntity {
+abstract class AbstractNamedEntity extends AbstractBaseEntity {
     @Column(name = "name", nullable = false)
     @NotBlank
     @SafeHtml
     @Size(min = 2, max = 120)
     private String name;
 
-    public AbstractNamedEntity(Integer id, String name) {
+    AbstractNamedEntity(Integer id, String name) {
         super(id);
         Assert.hasText(name, "Name must not be null or empty!");
         this.name = name;
