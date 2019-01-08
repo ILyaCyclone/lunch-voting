@@ -1,5 +1,6 @@
 package cyclone.lunchvoting.config;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
@@ -37,6 +38,9 @@ public class JacksonConfiguration {
 
         objectMapper.registerModule(javaTimeModule);
         objectMapper.registerModule(new Hibernate5Module()); // don't serialize lazy associations
+
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
         return objectMapper;
     }
 }

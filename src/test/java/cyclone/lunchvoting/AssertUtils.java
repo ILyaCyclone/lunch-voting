@@ -13,6 +13,9 @@ public class AssertUtils {
     private AssertUtils() {
     }
 
+    public static void assertRestaurantEquals(Restaurant actual, Restaurant expected) {
+        Assertions.assertThat(actual).isEqualToIgnoringGivenFields(expected, "menu");
+    }
     public static void assertRestaurantsContainsExactly(List<Restaurant> actual, Restaurant... expected) {
         Assertions.assertThat(actual).usingElementComparatorIgnoringFields("menu").containsExactly(expected);
     }

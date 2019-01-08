@@ -10,6 +10,8 @@ spring:
     rest:
       base-path: /api/admin
       detection-strategy: annotated
+      return-body-on-create: true
+      return-body-on-update: true
 
 cyclone:
   lunchvoting:

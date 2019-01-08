@@ -19,6 +19,8 @@ insert into users(id, name, email, password) values(201, 'User 2', 'user2@mail.o
 insert into user_roles(id_user, id_role) values (201, 200);
 insert into users(id, name, email, password) values(202, 'User 3', 'user3@mail.org', '{noop}userpass');
 insert into user_roles(id_user, id_role) values (202, 200);
+insert into users(id, name, email, password) values(203, 'User 4', 'user4@mail.org', '{noop}userpass');
+insert into user_roles(id_user, id_role) values (203, 200);
 
 
 insert into restaurants(id, name) values(1, 'Funny Pork');

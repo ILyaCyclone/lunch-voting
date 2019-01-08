@@ -1,5 +1,6 @@
 package cyclone.lunchvoting;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import org.springframework.test.web.servlet.MvcResult;
@@ -22,7 +23,7 @@ public class JsonUtils {
         return reader.<T>readValues(content).readAll();
     }
 
-//    public static <T> String writeValue(ObjectMapper objectMapper, T object) throws JsonProcessingException {
-//        return objectMapper.writeValueAsString(object);
-//    }
+    public static <T> String writeValue(ObjectMapper objectMapper, T object) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(object);
+    }
 }

@@ -8,12 +8,13 @@ spring:
         web-allow-others: true
 logging:
   level:
-#    org:
-#      springframework:
-#        web: debug
+    org:
+      springframework:
+        web: debug
+        security: debug
     cyclone:
       lunchvoting: debug
 
 cyclone:
   lunchvoting:
-    voting-ends: 23-30 # HH-mm format
+    voting-ends: 00-30 # HH-mm format
