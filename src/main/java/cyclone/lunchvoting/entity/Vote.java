@@ -1,7 +1,8 @@
 package cyclone.lunchvoting.entity;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -11,7 +12,8 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "user_votes")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class Vote extends AbstractBaseEntity {
 
@@ -37,6 +39,5 @@ public class Vote extends AbstractBaseEntity {
         this.restaurant = restaurant;
         this.date = date;
     }
-
 
 }

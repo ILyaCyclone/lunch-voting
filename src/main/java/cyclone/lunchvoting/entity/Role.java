@@ -1,7 +1,8 @@
 package cyclone.lunchvoting.entity;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Column;
@@ -11,7 +12,8 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "roles")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class Role extends AbstractNamedEntity implements GrantedAuthority {
 
@@ -22,5 +24,13 @@ public class Role extends AbstractNamedEntity implements GrantedAuthority {
     @Override
     public String getAuthority() {
         return super.getName();
+    }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + super.getId()
+                + ", name='" + super.getName() + '\'' +
+                '}';
     }
 }

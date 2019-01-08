@@ -1,17 +1,18 @@
 package cyclone.lunchvoting.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "restaurants")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class Restaurant extends AbstractNamedEntity {
 
@@ -28,16 +29,16 @@ public class Restaurant extends AbstractNamedEntity {
         super(id, name);
     }
 
-    public List<MenuItem> getMenu() {
-        return Collections.unmodifiableList(menu);
-    }
+//    public List<MenuItem> getMenu() {
+//        return Collections.unmodifiableList(menu);
+//    }
 
 
     @Override
     public String toString() {
         return "Restaurant{" +
                 "id=" + super.getId() +
-                ", name=" + super.getName()+
+                ", name=" + super.getName() +
                 '}';
     }
 

@@ -1,7 +1,8 @@
 package cyclone.lunchvoting.entity;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,7 +12,8 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "menu")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class MenuItem extends AbstractNamedEntity {
 
@@ -24,8 +26,9 @@ public class MenuItem extends AbstractNamedEntity {
     @NotNull
     private BigDecimal price;
 
-    @Column(name = "date", nullable = false)
-    @NotNull
+    @Column(name = "date", columnDefinition = "DEFAULT CURRENT_DATE()")
+//    @Column(name = "date", nullable = false)
+//    @NotNull
     private LocalDate date;
 
     public MenuItem(Integer id, String name, BigDecimal price, LocalDate date) {
@@ -52,9 +55,9 @@ public class MenuItem extends AbstractNamedEntity {
         MenuItem menuItem = (MenuItem) o;
         return
                 Objects.equals(super.getId(), menuItem.getId()) &&
-                Objects.equals(super.getName(), menuItem.getName()) &&
-                Objects.equals(price, menuItem.price) &&
-                Objects.equals(date, menuItem.date);
+                        Objects.equals(super.getName(), menuItem.getName()) &&
+                        Objects.equals(price, menuItem.price) &&
+                        Objects.equals(date, menuItem.date);
     }
 
     @Override

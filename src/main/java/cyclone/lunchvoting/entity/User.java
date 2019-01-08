@@ -1,8 +1,9 @@
 package cyclone.lunchvoting.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -12,7 +13,8 @@ import java.util.*;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class User extends AbstractNamedEntity {
     @Column(name = "email", nullable = false, unique = true)
@@ -39,9 +41,9 @@ public class User extends AbstractNamedEntity {
     public User(Integer id, String name, String email, String password) {
         this(id, name, email, password, null);
     }
+
     public User(Integer id, String name, String email, String password, Collection<Role> roles) {
         super(id, name);
-        Assert.hasText(name, "User name can't be empty");
         Assert.hasText(email, "User email can't be empty");
         Assert.hasText(password, "User password can't be empty");
         this.email = email;
