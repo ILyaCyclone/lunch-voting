@@ -23,6 +23,7 @@ Some of technologies used in the project:
 1. Spring Security
 1. Spring Rest Services
 1. JPA, Hibernate, Spring Data JPA
+1. Ehcache
 1. Spring Data REST
 1. H2 database
 1. AssertJ, MockMvc
