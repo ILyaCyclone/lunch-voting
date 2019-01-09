@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
-@Transactional(readOnly = true)
+@Transactional
 public interface VoteRepository extends JpaRepository<Vote, Integer> {
 
     void deleteByUserAndDate(User user, LocalDate date);

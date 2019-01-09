@@ -1,7 +1,8 @@
 package cyclone.lunchvoting.entity;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -11,7 +12,8 @@ import javax.persistence.*;
  */
 
 @MappedSuperclass
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 abstract class AbstractBaseEntity {
     @Id

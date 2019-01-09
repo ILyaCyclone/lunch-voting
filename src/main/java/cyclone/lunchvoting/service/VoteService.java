@@ -39,6 +39,7 @@ public class VoteService {
     }
 
     @Transactional
+//    @CacheEvict
     public void vote(int idUser, int idRestaurant, LocalDateTime dateTime) {
         if (!getVotingStatus(dateTime.toLocalTime()).isVotingActive()) {
             throw new VotingIsNotActiveException("Voting is not active at " + dateTime);
@@ -72,7 +73,8 @@ public class VoteService {
         return getVotingEndTime().isAfter(time);
     }
 
-    private LocalTime getVotingEndTime() {
+    //    @Cacheable(value="votingEndTime")
+    public LocalTime getVotingEndTime() {
         return DateTimeUtils.hhDashMmToLocalTime(votingEnds);
     }
 

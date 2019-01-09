@@ -1,6 +1,7 @@
 package cyclone.lunchvoting.repository;
 
 import cyclone.lunchvoting.entity.Restaurant;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -10,9 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
+import static cyclone.lunchvoting.config.CacheConfiguration.VOTING_CHOICE_CACHE;
+
 //@CrossOrigin
 @RepositoryRestResource
-@Transactional(readOnly = true)
+@Transactional
 //@PreAuthorize("hasRole('ROLE_ADMIN')")
 public interface RestaurantRepository extends JpaRepository<Restaurant, Integer> {
 
@@ -22,4 +25,15 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
     @RestResource(path = "findByName", rel = "findByName")
     Restaurant findByNameContainingIgnoreCaseOrderByName(String name);
 
+    @Override
+    @CacheEvict(value = VOTING_CHOICE_CACHE, allEntries = true)
+    <S extends Restaurant> S save(S s);
+
+    @Override
+    @CacheEvict(value = VOTING_CHOICE_CACHE, allEntries = true)
+    void deleteById(Integer integer);
+
+    @Override
+    @CacheEvict(value = VOTING_CHOICE_CACHE, allEntries = true)
+    void delete(Restaurant restaurant);
 }
