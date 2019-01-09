@@ -1,7 +1,8 @@
 package cyclone.lunchvoting.entity;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.util.Assert;
 
 import javax.persistence.Column;
@@ -10,7 +11,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @MappedSuperclass
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 abstract class AbstractNamedEntity extends AbstractBaseEntity {
     @Column(name = "name", nullable = false)
