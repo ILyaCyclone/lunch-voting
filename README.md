@@ -1,7 +1,7 @@
 # About
 Voting system for deciding where to have lunch.
 
-#Requirements
+# Requirements
 Design and implement a REST API (without frontend).
 
 Build a voting system for deciding where to have lunch.
@@ -17,7 +17,7 @@ Build a voting system for deciding where to have lunch.
 
 Each restaurant provides new menu each day.
 
-#Technologies
+# Technologies
 Some of technologies used in the project:
 1. Spring Boot
 1. Spring Security
@@ -71,54 +71,54 @@ Check full documentation at https://docs.spring.io/spring-data/rest/docs/current
 
 `curl http://localhost:8080/api/admin/restaurants -u admin1@mail.org:adminpass`
 
-###Get specific restaurant (ID 1)
+### Get specific restaurant (ID 1)
 
 `curl http://localhost:8080/api/admin/restaurants/1 -u admin1@mail.org:adminpass`
 
-###Find restaurants by name containing string "pork" ignoring case
+### Find restaurants by name containing string "pork" ignoring case
 
 `curl http://localhost:8080/api/admin/restaurants/search/findByName?name=pork -u admin1@mail.org:adminpass -i`
 
-###List all menu items
+### List all menu items
 
 `curl http://localhost:8080/api/admin/menu -u admin1@mail.org:adminpass`
 
-###Sort all menu items by price
+### Sort all menu items by price
 
 `curl http://localhost:8080/api/admin/menu?sort=price,desc -u admin1@mail.org:adminpass -i`
 
-###Create new restaurant
+### Create new restaurant
 
 `curl http://localhost:8080/api/admin/restaurants -X POST -u admin1@mail.org:adminpass -H "Content-Type:application/json" -d "{\"name\":\"Brave new world\"}" -i`
 
-###Create menu in new restaurant (assuming generated ID is 4)
+### Create menu in new restaurant (assuming generated ID is 4)
 
 `curl http://localhost:8080/api/admin/menu -X POST -u admin1@mail.org:adminpass -H "Content-Type:application/json" -d "{\"name\":\"Vikings salad\", \"price\": \"85.50\", \"restaurant\": \"http://localhost:8080/api/admin/restaurants/4\"}" -i`
 
 `curl http://localhost:8080/api/admin/menu -X POST -u admin1@mail.org:adminpass -H "Content-Type:application/json" -d "{\"name\":\"Firstborn carrot\", \"price\": \"10\", \"restaurant\": \"http://localhost:8080/api/admin/restaurants/4\"}" -i`
 
-###Edit created menu item (assuming last generated ID is 25):
+### Edit created menu item (assuming last generated ID is 25):
 
 `curl http://localhost:8080/api/admin/menu/25 -X PUT -u admin1@mail.org:adminpass -H "Content-Type:application/json" -d "{\"id\":25, \"name\":\"Firstborn carrot BIG\", \"price\": \"100\", \"restaurant\": \"http://localhost:8080/api/admin/restaurants/4\"}" -i`
 
-###Get user voting choice
+### Get user voting choice
 
 `curl http://localhost:8080/api/user/list -u user1@mail.org:userpass -i`
 
-###Vote for restaurant ID 4 by user1 (changed his mind) and user4 (new vote)
+### Vote for restaurant ID 4 by user1 (changed his mind) and user4 (new vote)
 New votes will be accepted only while voting is not finished (11:00 by default). Otherwise expect error 500: "Voting is not active at {time}".
 
 `curl http://localhost:8080/api/user/vote/4 -X POST -u user1@mail.org:userpass -i`
 
 `curl http://localhost:8080/api/user/vote/4 -X POST -u user4@mail.org:userpass -i`
 
-##Extra
+## Extra
 Some additional methods.
 
-###Get current voting status
+### Get current voting status
 `curl http://localhost:8080/api/user/voting-status -u user1@mail.org:userpass -i`
 
-###Get voting result
+### Get voting result
 You can get voting result only after voting is finished (11:00 by default). Otherwise expect error 500: "Voting is not finished at {time}".
 
 `curl http://localhost:8080/api/user/voting-result -u user1@mail.org:userpass -i`
