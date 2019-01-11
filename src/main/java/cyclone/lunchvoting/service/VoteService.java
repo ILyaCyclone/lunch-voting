@@ -48,7 +48,7 @@ public class VoteService {
             voteRepository.deleteByUserAndDate(user, dateTime.toLocalDate());
 
 //            restaurantRef = restaurantRepository.getOne(idRestaurant); // doesn't throw Exception if not found
-            Restaurant restaurant = restaurantRepository.findById(idUser).orElseThrow(() -> new NotFoundException("Restaurant ID " + idRestaurant + " not found."));
+            Restaurant restaurant = restaurantRepository.findById(idRestaurant).orElseThrow(() -> new NotFoundException("Restaurant ID " + idRestaurant + " not found."));
 
             Vote vote = new Vote(user, restaurant, dateTime.toLocalDate());
             voteRepository.save(vote);
