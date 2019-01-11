@@ -2,9 +2,11 @@ package cyclone.lunchvoting.web;
 
 import cyclone.lunchvoting.AssertUtils;
 import cyclone.lunchvoting.JsonUtils;
+import cyclone.lunchvoting.dto.ErrorResponse;
 import cyclone.lunchvoting.dto.VotingStatus;
 import cyclone.lunchvoting.entity.Restaurant;
 import cyclone.lunchvoting.exception.VotingIsNotActiveException;
+import cyclone.lunchvoting.exception.VotingIsNotFinishedException;
 import cyclone.lunchvoting.util.DateTimeUtils;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
@@ -14,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.web.util.NestedServletException;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -32,7 +33,6 @@ class UserControllerTest extends AbstractControllerTest {
 
     @Value("${cyclone.lunchvoting.voting-ends}")
     private String votingEnds;
-
 
 
     @Test
@@ -54,32 +54,30 @@ class UserControllerTest extends AbstractControllerTest {
     }
 
 
-
-
     @Test
     void vote_successful() throws Exception {
-        Assumptions.assumeTrue(DateTimeUtils.hhDashMmToLocalTime(votingEnds).isAfter(DateTimeUtils.now()), "Voting is not currently active");
+        assumeVotingIsActive();
 
         mockMvc.perform(post(URL + "/vote/" + RESTAURANT3.getId())
-                        .with(httpBasicAuth(USER200))
-//                .with(csrf())
+                .with(httpBasicAuth(USER200))
         )
                 .andExpect(status().isNoContent());
     }
 
     @Test
     void vote_notActive() throws Exception {
-        Assumptions.assumeFalse(DateTimeUtils.hhDashMmToLocalTime(votingEnds).isAfter(DateTimeUtils.now()), "Voting is not currently active");
+        assumeVotingIsNotActive();
 
-        //
-        Throwable cause = org.junit.jupiter.api.Assertions.assertThrows(NestedServletException.class, () ->
-                        mockMvc.perform(post(URL + "/vote/" + RESTAURANT3.getId())
-                                        .with(httpBasicAuth(USER200))
-//                .with(csrf())
-                        )
-        ).getCause();
+        MvcResult mvcResult =
+                mockMvc.perform(post(URL + "/vote/" + RESTAURANT3.getId())
+                        .with(httpBasicAuth(USER200)))
+                        .andDo(print())
+                        .andExpect(status().isUnprocessableEntity())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andReturn();
 
-        Assertions.assertThat(cause).isInstanceOf(VotingIsNotActiveException.class);
+        ErrorResponse errorResponse = JsonUtils.readValueFromMvcResult(super.objectMapper, mvcResult, ErrorResponse.class);
+        Assertions.assertThat(errorResponse.getError()).isEqualTo(VotingIsNotActiveException.class.getSimpleName());
     }
 
     @Test
@@ -88,24 +86,24 @@ class UserControllerTest extends AbstractControllerTest {
         MvcResult mvcResult =
                 mockMvc.perform(get(URL + "/voting-status")
                         .with(httpBasicAuth(USER200)))
-                        .andExpect(status().isOk())
                         .andDo(print())
+                        .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andReturn();
         VotingStatus actualVotingStatus = JsonUtils.readValueFromMvcResult(super.objectMapper, mvcResult, VotingStatus.class);
 
         LocalTime expectedVotingEndTime = DateTimeUtils.hhDashMmToLocalTime(votingEnds);
-        // depend on server time rather than client time so that our tests won't fail at 10:59.999
-        boolean expectedVotingActive = expectedVotingEndTime.isAfter(actualVotingStatus.getServerTime());
 
         Assertions.assertThat(actualVotingStatus.getVotingEndTime()).isEqualTo(expectedVotingEndTime);
-        Assertions.assertThat(actualVotingStatus.isVotingActive()).isEqualTo(expectedVotingActive);
+        // depend on server time rather than client time so that our tests won't fail at 10:59.999
+        Assertions.assertThat(actualVotingStatus.isVotingActive()).isEqualTo(votingIsActive(actualVotingStatus.getServerTime()));
     }
 
 
-
     @Test
-    void getVotingResult() throws Exception {
+    void getVotingResult_successful() throws Exception {
+        assumeVotingIsNotActive();
+
 //        MvcResult mvcResult =
         mockMvc.perform(get(URL + "/voting-result")
                 .with(httpBasicAuth(USER200)))
@@ -118,5 +116,38 @@ class UserControllerTest extends AbstractControllerTest {
                 .andExpect(jsonPath("$[0].votes").value(2))
                 .andExpect(jsonPath("$.length()").value(1))
         ;
+    }
+
+    @Test
+    void getVotingResult_votingIsNotFinished() throws Exception {
+        assumeVotingIsActive();
+
+        MvcResult mvcResult =
+                mockMvc.perform(get(URL + "/voting-result")
+                        .with(httpBasicAuth(USER200)))
+                        .andDo(print())
+                        .andExpect(status().isUnprocessableEntity())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andReturn();
+
+        ErrorResponse errorResponse = JsonUtils.readValueFromMvcResult(super.objectMapper, mvcResult, ErrorResponse.class);
+        Assertions.assertThat(errorResponse.getError()).isEqualTo(VotingIsNotFinishedException.class.getSimpleName());
+    }
+
+
+    private void assumeVotingIsActive() {
+        Assumptions.assumeTrue(votingIsActive(), "Voting is currently not active");
+    }
+
+    private void assumeVotingIsNotActive() {
+        Assumptions.assumeFalse(votingIsActive(), "Voting is currently active");
+    }
+
+    private boolean votingIsActive() {
+        return DateTimeUtils.hhDashMmToLocalTime(votingEnds).isAfter(DateTimeUtils.now());
+    }
+
+    private boolean votingIsActive(LocalTime dateTime) {
+        return DateTimeUtils.hhDashMmToLocalTime(votingEnds).isAfter(dateTime);
     }
 }
