@@ -1,7 +1,6 @@
 package cyclone.lunchvoting.service;
 
 import cyclone.lunchvoting.dto.RestaurantVotes;
-import cyclone.lunchvoting.dto.VotingStatus;
 import cyclone.lunchvoting.entity.Restaurant;
 import cyclone.lunchvoting.entity.User;
 import cyclone.lunchvoting.entity.Vote;
@@ -12,12 +11,10 @@ import cyclone.lunchvoting.repository.RestaurantRepository;
 import cyclone.lunchvoting.repository.UserRepository;
 import cyclone.lunchvoting.repository.VoteRepository;
 import cyclone.lunchvoting.util.DateTimeUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -27,20 +24,19 @@ public class VoteService {
     private UserRepository userRepository;
     private RestaurantRepository restaurantRepository;
 
+    private VotingStatusService votingStatusService;
 
-    @Value("${cyclone.lunchvoting.voting-ends}")
-    private String votingEnds;
-
-    public VoteService(VoteRepository voteRepository, UserRepository userRepository, RestaurantRepository restaurantRepository) {
+    public VoteService(VoteRepository voteRepository, UserRepository userRepository, RestaurantRepository restaurantRepository, VotingStatusService votingStatusService) {
         this.voteRepository = voteRepository;
         this.userRepository = userRepository;
         this.restaurantRepository = restaurantRepository;
+        this.votingStatusService = votingStatusService;
     }
 
     @Transactional
 //    @CacheEvict
     public void vote(int idUser, int idRestaurant, LocalDateTime dateTime) {
-        if (!getVotingStatus(dateTime.toLocalTime()).isVotingActive()) {
+        if (!votingStatusService.isVotingActive(dateTime.toLocalTime())) {
             throw new VotingIsNotActiveException("Voting is not active at " + dateTime);
         } else {
 //            user = userRepository.getOne(idUser); // doesn't throw Exception if not found
@@ -56,22 +52,8 @@ public class VoteService {
         }
     }
 
-    public VotingStatus getVotingStatus(LocalTime time) {
-        return new VotingStatus(time, getVotingEndTime(), isVotingActive(time));
-    }
-
-    private boolean isVotingActive(LocalTime time) {
-        return getVotingEndTime().isAfter(time);
-    }
-
-    //    @Cacheable(value="votingEndTime")
-    public LocalTime getVotingEndTime() {
-        return DateTimeUtils.hhDashMmToLocalTime(votingEnds);
-    }
-
-
     public List<RestaurantVotes> getVotingResult(LocalDateTime dateTime) {
-        if (DateTimeUtils.isPast(dateTime) || !isVotingActive(dateTime.toLocalTime())) {
+        if (DateTimeUtils.isPast(dateTime) || !votingStatusService.isVotingActive(dateTime.toLocalTime())) {
             return voteRepository.getVotingWinners(dateTime.toLocalDate());
         } else {
             throw new VotingIsNotFinishedException("Voting is not finished at " + dateTime + ".");

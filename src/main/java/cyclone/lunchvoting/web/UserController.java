@@ -5,6 +5,7 @@ import cyclone.lunchvoting.dto.VotingStatus;
 import cyclone.lunchvoting.entity.Restaurant;
 import cyclone.lunchvoting.service.RestaurantService;
 import cyclone.lunchvoting.service.VoteService;
+import cyclone.lunchvoting.service.VotingStatusService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +21,13 @@ import static cyclone.lunchvoting.web.UserController.URL;
 public class UserController {
     static final String URL = "/api/user";
 
-    private VoteService voteService;
-    private RestaurantService restaurantService;
+    private final VoteService voteService;
+    private final VotingStatusService votingStatusService;
+    private final RestaurantService restaurantService;
 
-    public UserController(VoteService voteService, RestaurantService restaurantService) {
+    public UserController(VoteService voteService, VotingStatusService votingStatusService, RestaurantService restaurantService) {
         this.voteService = voteService;
+        this.votingStatusService = votingStatusService;
         this.restaurantService = restaurantService;
     }
 
@@ -44,7 +47,7 @@ public class UserController {
 
     @GetMapping("/voting-status")
     public VotingStatus getVotingStatus() {
-        return voteService.getVotingStatus(now());
+        return votingStatusService.getVotingStatus(now());
     }
 
 
