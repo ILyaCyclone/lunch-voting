@@ -39,7 +39,7 @@ public class VoteService {
         if (!votingStatusService.isVotingActive(dateTime.toLocalTime())) {
             throw new VotingIsNotActiveException("Voting is not active at " + dateTime);
         } else {
-//            user = userRepository.getOne(idUser); // doesn't throw Exception if not found
+//            user = userRepository.getOne(idUser); // doesn't throw Exception if not found - javadoc bug: https://jira.spring.io/plugins/servlet/mobile#issue/DATAJPA-1321
             User user = userRepository.findById(idUser).orElseThrow(() -> new NotFoundException("User ID" + idUser + " not found."));
             // clear other today's user votes
             voteRepository.deleteByUserAndDate(user, dateTime.toLocalDate());

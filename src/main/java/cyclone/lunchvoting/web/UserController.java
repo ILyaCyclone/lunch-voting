@@ -8,6 +8,7 @@ import cyclone.lunchvoting.service.VoteService;
 import cyclone.lunchvoting.service.VotingStatusService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,7 +42,10 @@ public class UserController {
     @PostMapping("/vote/{idRestaurant}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void vote(@PathVariable int idRestaurant) {
-        int currentUserId = SecurityUtil.getCurrentUserId();
+        Integer currentUserId = SecurityUtil.getCurrentUserId();
+        if (currentUserId == null) {
+            throw new AccessDeniedException("User ID not found.");
+        }
         voteService.vote(currentUserId, idRestaurant, dateTime());
     }
 
