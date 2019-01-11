@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -44,23 +43,15 @@ public class VoteService {
         if (!getVotingStatus(dateTime.toLocalTime()).isVotingActive()) {
             throw new VotingIsNotActiveException("Voting is not active at " + dateTime);
         } else {
-            User user;
-            try {
-                user = userRepository.getOne(idUser);
-            } catch (EntityNotFoundException e) {
-                throw new NotFoundException("User ID" + idUser + " not found.");
-            }
+//            user = userRepository.getOne(idUser); // doesn't throw Exception if not found
+            User user = userRepository.findById(idUser).orElseThrow(() -> new NotFoundException("User ID" + idUser + " not found."));
             // clear other today's user votes
             voteRepository.deleteByUserAndDate(user, dateTime.toLocalDate());
 
-            Restaurant restaurantRef;
-            try {
-                restaurantRef = restaurantRepository.getOne(idRestaurant);
-            } catch (EntityNotFoundException e) {
-                throw new NotFoundException("Restaurant ID" + idRestaurant + " not found.");
-            }
+//            restaurantRef = restaurantRepository.getOne(idRestaurant); // doesn't throw Exception if not found
+            Restaurant restaurant = restaurantRepository.findById(idUser).orElseThrow(() -> new NotFoundException("Restaurant ID " + idRestaurant + " not found."));
 
-            Vote vote = new Vote(user, restaurantRef, dateTime.toLocalDate());
+            Vote vote = new Vote(user, restaurant, dateTime.toLocalDate());
             voteRepository.save(vote);
         }
     }
@@ -83,7 +74,7 @@ public class VoteService {
         if (DateTimeUtils.isPast(dateTime) || !isVotingActive(dateTime.toLocalTime())) {
             return voteRepository.getVotingWinners(dateTime.toLocalDate());
         } else {
-            throw new VotingIsNotFinishedException("Voting is not finished at "+dateTime+".");
+            throw new VotingIsNotFinishedException("Voting is not finished at " + dateTime + ".");
         }
     }
 }
