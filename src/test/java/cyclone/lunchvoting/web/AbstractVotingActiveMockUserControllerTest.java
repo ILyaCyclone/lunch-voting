@@ -30,7 +30,7 @@ abstract class AbstractVotingActiveMockUserControllerTest extends AbstractContro
     UserController userController;
 
     @BeforeEach
-    public void setup() {
+    public void setUp() {
         // rely on @AutoconfigureMockMvc
 
 //        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac)

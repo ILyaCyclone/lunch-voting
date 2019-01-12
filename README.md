@@ -28,8 +28,29 @@ Some of technologies used in the project:
 1. H2 database
 1. AssertJ, MockMvc
 
-# curl commands
-## OS format
+# Running the application
+## Prerequisites
+- Maven binary in your `PATH` variable
+- `JAVA_HOME` variable set to JDK 1.8 or higher
+
+## Running
+`git clone <this repository>` or download in any other way  
+`cd lunch-voting`  
+`mvn spring-boot:run`
+
+## Configuration
+By default the application will start on port 8080. To start on different port set `server.port` property value.  
+According to requirements, the application behaves differently before and after 11:00.  
+Different time can be set using `cyclone.lunchvoting.voting-ends` property value (`HH-mm` format).
+
+Example of running application on port 8085 with voting end time at 20:00:
+
+`mvn spring-boot:run -Dspring-boot.run.arguments=--server.port=8085,--cyclone.lunchvoting.voting-ends=20-00`
+
+# API
+## curl
+Application API is demonstrated using `curl` tool.
+
 Windows and *nix curl commands may have different formats.  
 When sending JSON in *nix system the parameter will be  
 `-d '{"name":"Another brave world"}'`  
@@ -58,13 +79,9 @@ List of available users (login:password):
 
 
 ## Commands
-
 Assuming the application is running as root of http://localhost:8080/.
 
-According to requirements, the application behaves differently before and after 11:00.  
-This time can be set to needed value using property `cyclone.lunchvoting.voting-ends=11:00` (HH:mm format).
-  
-/api/admin/restaurants and /api/admin/menu endpoints support standard Spring Data REST parameters for paging and sorting which are:
+`/api/admin/restaurants` and `/api/admin/menu` endpoints support standard Spring Data REST parameters for paging and sorting which are:
 - page: The page number to access (0 indexed, defaults to 0).
 - size: The page size requested (defaults to 20).
 - sort: A collection of sort directives in the format ($propertyname,)+[asc|desc]?.
@@ -72,27 +89,21 @@ This time can be set to needed value using property `cyclone.lunchvoting.voting-
 Check full documentation at https://docs.spring.io/spring-data/rest/docs/current/reference/html/.
 
 ### List restaurants
-
 `curl http://localhost:8080/api/admin/restaurants -u admin1@mail.org:adminpass`
 
 ### Get specific restaurant (ID 1)
-
 `curl http://localhost:8080/api/admin/restaurants/1 -u admin1@mail.org:adminpass`
 
 ### Find restaurants by name containing string "pork" ignoring case
-
 `curl http://localhost:8080/api/admin/restaurants/search/findByName?name=pork -u admin1@mail.org:adminpass -i`
 
 ### List all menu items
-
 `curl http://localhost:8080/api/admin/menu -u admin1@mail.org:adminpass`
 
 ### Sort all menu items by price
-
 `curl http://localhost:8080/api/admin/menu?sort=price,desc -u admin1@mail.org:adminpass -i`
 
 ### Get specific restaurant (ID 1) menu
-
 `curl http://localhost:8080/api/admin/restaurants/1/menu -u admin1@mail.org:adminpass -i`
 
 ### Create new restaurant
@@ -100,17 +111,14 @@ Check full documentation at https://docs.spring.io/spring-data/rest/docs/current
 `curl http://localhost:8080/api/admin/restaurants -X POST -u admin1@mail.org:adminpass -H "Content-Type:application/json" -d "{\"name\":\"Brave new world\"}" -i`
 
 ### Create menu in new restaurant (assuming generated ID is 4)
-
 `curl http://localhost:8080/api/admin/menu -X POST -u admin1@mail.org:adminpass -H "Content-Type:application/json" -d "{\"name\":\"Vikings salad\", \"price\": \"85.50\", \"restaurant\": \"http://localhost:8080/api/admin/restaurants/4\"}" -i`
 
 `curl http://localhost:8080/api/admin/menu -X POST -u admin1@mail.org:adminpass -H "Content-Type:application/json" -d "{\"name\":\"Firstborn carrot\", \"price\": \"10\", \"restaurant\": \"http://localhost:8080/api/admin/restaurants/4\"}" -i`
 
 ### Edit created menu item (assuming last generated ID is 25):
-
 `curl http://localhost:8080/api/admin/menu/25 -X PUT -u admin1@mail.org:adminpass -H "Content-Type:application/json" -d "{\"id\":25, \"name\":\"Firstborn carrot BIG\", \"price\": \"100\", \"restaurant\": \"http://localhost:8080/api/admin/restaurants/4\"}" -i`
 
 ### Get user voting choice
-
 `curl http://localhost:8080/api/user/list -u user1@mail.org:userpass -i`
 
 ### Vote for restaurant ID 4 by user1 (changed his mind) and user4 (new vote)
