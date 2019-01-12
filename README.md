@@ -38,6 +38,10 @@ Some of technologies used in the project:
 `cd lunch-voting`  
 `mvn spring-boot:run`
 
+## Testing
+Run tests with Maven:  
+`mvn test`
+
 ## Configuration
 By default the application will start on port 8080. To start on different port set `server.port` property value.  
 According to requirements, the application behaves differently before and after 11:00.  
