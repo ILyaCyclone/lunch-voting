@@ -26,10 +26,9 @@ public class MenuItem extends AbstractNamedEntity {
     @NotNull
     private BigDecimal price;
 
-    @Column(name = "date", columnDefinition = "DEFAULT CURRENT_DATE()")
-//    @Column(name = "date", nullable = false)
-//    @NotNull
-    private LocalDate date;
+    @Column(name = "date", nullable = false, columnDefinition = "DEFAULT CURRENT_DATE()")
+    @NotNull
+    private LocalDate date = LocalDate.now(); // should have default value so that JPA won't insert null
 
     public MenuItem(Integer id, String name, BigDecimal price, LocalDate date) {
         super(id, name);
