@@ -36,16 +36,15 @@ public class VoteService {
     @Transactional
 //    @CacheEvict
     public void vote(int idUser, int idRestaurant, LocalDateTime dateTime) {
-        if (!votingStatusService.isVotingActive(dateTime.toLocalTime())) {
+        if (DateTimeUtils.isPast(dateTime) || !votingStatusService.isVotingActive(dateTime.toLocalTime())) {
             throw new VotingIsNotActiveException("Voting is not active at " + dateTime);
         } else {
-//            user = userRepository.getOne(idUser); // doesn't throw Exception if not found - javadoc bug: https://jira.spring.io/plugins/servlet/mobile#issue/DATAJPA-1321
+//            restaurantRef = restaurantRepository.getOne(idRestaurant); // doesn't throw Exception if not found - javadoc bug: https://jira.spring.io/plugins/servlet/mobile#issue/DATAJPA-1321
+            Restaurant restaurant = restaurantRepository.findByIdAndMenuDate(idRestaurant, dateTime.toLocalDate()).orElseThrow(() -> new NotFoundException("No available restaurant ID " + idRestaurant + " on date " + dateTime.toLocalDate() + "."));
+
             User user = userRepository.findById(idUser).orElseThrow(() -> new NotFoundException("User ID" + idUser + " not found."));
             // clear other today's user votes
             voteRepository.deleteByUserAndDate(user, dateTime.toLocalDate());
-
-//            restaurantRef = restaurantRepository.getOne(idRestaurant); // doesn't throw Exception if not found
-            Restaurant restaurant = restaurantRepository.findById(idRestaurant).orElseThrow(() -> new NotFoundException("Restaurant ID " + idRestaurant + " not found."));
 
             Vote vote = new Vote(user, restaurant, dateTime.toLocalDate());
             voteRepository.save(vote);

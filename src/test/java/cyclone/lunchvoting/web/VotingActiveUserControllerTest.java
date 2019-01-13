@@ -4,10 +4,12 @@ import cyclone.lunchvoting.JsonUtils;
 import cyclone.lunchvoting.dto.ErrorResponse;
 import cyclone.lunchvoting.exception.VotingIsNotFinishedException;
 import org.assertj.core.api.Assertions;
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
+import static cyclone.lunchvoting.TestData.RESTAURANT2;
 import static cyclone.lunchvoting.TestData.RESTAURANT3;
 import static cyclone.lunchvoting.UserTestData.USER200;
 import static cyclone.lunchvoting.web.UserController.URL;
@@ -26,9 +28,26 @@ public class VotingActiveUserControllerTest extends AbstractVotingActiveMockUser
 
     @Test
     void vote() throws Exception {
-        mockMvc.perform(post(URL + "/vote/" + RESTAURANT3.getId())
+        mockMvc.perform(post(URL + "/vote/" + RESTAURANT2.getId())
                 .with(httpBasicAuth(USER200)))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void vote_restaurantWithoutMenuOnDate() throws Exception {
+        mockMvc.perform(post(URL + "/vote/" + RESTAURANT3.getId())
+                .with(httpBasicAuth(USER200)))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(CoreMatchers.containsString("No available restaurant ID " + RESTAURANT3.getId() + " on date")));
+    }
+
+    @Test
+    void vote_restaurantNotFound() throws Exception {
+        int nonExistentIdRestaurant = 999;
+        mockMvc.perform(post(URL + "/vote/" + nonExistentIdRestaurant)
+                .with(httpBasicAuth(USER200)))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(CoreMatchers.containsString("No available restaurant ID " + nonExistentIdRestaurant + " on date")));
     }
 
     @Test

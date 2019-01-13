@@ -37,6 +37,8 @@ insert into menu(id, id_restaurant, name, price) values(21, 2, 'Nullified Burger
 insert into menu(id, id_restaurant, name, price) values(22, 2, 'Pure Water', 0.50);
 insert into menu(id, id_restaurant, name, price) values(23, 2, 'Smell of pizza', 75);
 
+insert into menu(id, id_restaurant, name, price, date) values(31, 3, 'Fish&Chips', 100, '2019-01-01');
+
 
 insert into user_votes(id_restaurant, id_user) values (1, 200);
 insert into user_votes(id_restaurant, id_user) values (1, 201);

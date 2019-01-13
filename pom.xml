@@ -11,7 +11,7 @@
 
     <groupId>cyclone.lunch-voting</groupId>
     <artifactId>lunch-voting</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>lunch-voting</name>
     <description>REST API for voting system for deciding where to have lunch.</description>
 

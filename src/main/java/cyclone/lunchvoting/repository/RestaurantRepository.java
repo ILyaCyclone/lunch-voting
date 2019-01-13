@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static cyclone.lunchvoting.config.CacheConfiguration.VOTING_CHOICE_CACHE;
 
@@ -24,6 +25,8 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
 
     @RestResource(path = "findByName", rel = "findByName")
     Restaurant findByNameContainingIgnoreCaseOrderByName(String name);
+
+    Optional<Restaurant> findByIdAndMenuDate(Integer id, LocalDate localDate);
 
     @Override
     @CacheEvict(value = VOTING_CHOICE_CACHE, allEntries = true)
