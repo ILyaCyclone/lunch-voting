@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/ILyaCyclone/lunch-voting.svg?branch=master)](https://travis-ci.com/ILyaCyclone/lunch-voting)
+
 # About
 Voting system for deciding where to have lunch.
 
