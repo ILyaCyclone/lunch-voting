@@ -6,14 +6,12 @@ import cyclone.lunchvoting.entity.Restaurant;
 import cyclone.lunchvoting.service.RestaurantService;
 import cyclone.lunchvoting.service.VoteService;
 import cyclone.lunchvoting.service.VotingStatusService;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static cyclone.lunchvoting.config.CacheConfiguration.VOTING_CHOICE_CACHE;
 import static cyclone.lunchvoting.util.DateTimeUtils.*;
 import static cyclone.lunchvoting.web.UserController.URL;
 
@@ -33,7 +31,7 @@ public class UserController {
     }
 
     @GetMapping("/list")
-    @Cacheable(value = VOTING_CHOICE_CACHE, keyGenerator = "todayCacheKeyGenerator")
+//    @Cacheable(value = VOTING_CHOICE_BY_DATE, keyGenerator = "todayCacheKeyGenerator") // moved to repository layer
     public List<Restaurant> getTodaysRestaurants() {
         return restaurantService.findAllWithMenuByDate(today());
     }

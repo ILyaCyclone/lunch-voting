@@ -9,9 +9,9 @@
 
   <cache-template name="expiryCache">
     <expiry>
-      <ttl unit="minutes">5</ttl>
+        <ttl unit="hours">1</ttl>
     </expiry>
-    <heap unit="entries">50</heap>
+      <heap unit="entries">100</heap>
   </cache-template>
 
   <cache-template name="singleNonExpiryCache">
@@ -26,8 +26,10 @@
     <expiry>
       <ttl unit="hours">24</ttl>
     </expiry>
-    <heap unit="entries">50</heap>
+      <heap unit="entries">10</heap>
   </cache-template>
 
-  <cache alias="voting-choice" uses-template="daylong"/>
+    <cache alias="voting-choice-by-date" uses-template="daylong"/>
+    <cache alias="restaurant-by-id-and-menu-date" uses-template="expiryCache"/>
+    <cache alias="user-by-id" uses-template="expiryCache"/>
 </config>

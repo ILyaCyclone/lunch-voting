@@ -16,6 +16,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/h2-console", "/h2-console/**");
 //    }
 
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.
                 authorizeRequests()
