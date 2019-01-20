@@ -3,6 +3,8 @@ package cyclone.lunchvoting.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -20,6 +22,7 @@ public class MenuItem extends AbstractNamedEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_restaurant", nullable = false)
     @NotNull
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Restaurant restaurant;
 
     @Column(name = "price", nullable = false)
