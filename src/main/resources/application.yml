@@ -6,6 +6,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none # disable Hibernate schema initialization
+    open-in-view: false # https://stackoverflow.com/questions/30549489/what-is-this-spring-jpa-open-in-view-true-property-in-spring-boot/48222934#48222934
+
   data:
     rest:
       base-path: /api/admin
