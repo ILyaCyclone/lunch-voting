@@ -17,29 +17,23 @@ import static cyclone.lunchvoting.config.CacheConfiguration.VOTING_CHOICE_BY_DAT
 public interface MenuItemRepository extends JpaRepository<MenuItem, Integer> {
 
     @Override
-//    @CacheEvict(value = VOTING_CHOICE_BY_DATE, allEntries = true)
     @Caching(evict = {
             @CacheEvict(value = VOTING_CHOICE_BY_DATE, key = "#p0.date")
-            , @CacheEvict(value = RESTAURANT_BY_ID_AND_MENU_DATE, allEntries = true)
+            , @CacheEvict(value = RESTAURANT_BY_ID_AND_MENU_DATE, keyGenerator = "restaurantIdAndMenuDateByMenuItemKeyGenerator")
     })
     <S extends MenuItem> S save(S s);
 
     @Override
-//    @RestResource(exported = false)
-//    @CacheEvict(value = VOTING_CHOICE_BY_DATE, allEntries = true)
-//    @CacheEvict(value = VOTING_CHOICE_BY_DATE, key = "#menuItem.date")
     @Caching(evict = {
             @CacheEvict(value = VOTING_CHOICE_BY_DATE, key = "#p0.date")
-            , @CacheEvict(value = RESTAURANT_BY_ID_AND_MENU_DATE, allEntries = true)
+            , @CacheEvict(value = RESTAURANT_BY_ID_AND_MENU_DATE, keyGenerator = "restaurantIdAndMenuDateByMenuItemKeyGenerator")
     })
     void delete(MenuItem menuItem);
 
     @Override
-//    @CacheEvict(value = VOTING_CHOICE_BY_DATE, allEntries = true)
-//    @CacheEvict(value = VOTING_CHOICE_BY_DATE, key = "findById(#id)")
     @Caching(evict = {
             @CacheEvict(value = VOTING_CHOICE_BY_DATE, keyGenerator = "menuDateByIdKeyGenerator")
-            , @CacheEvict(value = RESTAURANT_BY_ID_AND_MENU_DATE, allEntries = true)
+            , @CacheEvict(value = RESTAURANT_BY_ID_AND_MENU_DATE, keyGenerator = "restaurantIdAndMenuDateByMenuItemIdKeyGenerator")
     })
     void deleteById(Integer id);
 
