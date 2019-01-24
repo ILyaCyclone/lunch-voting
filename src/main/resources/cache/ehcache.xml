@@ -32,4 +32,5 @@
     <cache alias="voting-choice-by-date" uses-template="daylong"/>
     <cache alias="restaurant-by-id-and-menu-date" uses-template="expiryCache"/>
     <cache alias="user-by-id" uses-template="expiryCache"/>
+  <cache alias="user-by-email" uses-template="expiryCache"/>
 </config>

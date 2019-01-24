@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @NoArgsConstructor
-abstract class AbstractNamedEntity extends AbstractBaseEntity {
+public abstract class AbstractNamedEntity extends AbstractBaseEntity {
     @Column(name = "name", nullable = false)
     @NotBlank
     @Size(min = 2, max = 120)

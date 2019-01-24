@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-abstract class AbstractBaseEntity {
+public abstract class AbstractBaseEntity {
     @Id
 //    @GeneratedValue(strategy = GenerationType.AUTO) // Sequence "HIBERNATE_SEQUENCE" not found
     @GeneratedValue(strategy = GenerationType.IDENTITY)

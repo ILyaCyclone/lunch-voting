@@ -7,11 +7,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static cyclone.lunchvoting.config.CacheConfiguration.USER_BY_EMAIL;
 import static cyclone.lunchvoting.config.CacheConfiguration.USER_BY_ID;
 
 @Transactional(readOnly = true)
 public interface UserRepository extends JpaRepository<User, Integer> {
 
+    @Cacheable(value = USER_BY_EMAIL)
     Optional<User> findByEmailIgnoreCase(String email);
 
     @Override
